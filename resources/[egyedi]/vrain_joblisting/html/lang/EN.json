@@ -1,0 +1,10 @@
+{
+    "confirmationPhraseUnemployed":     "Biztosan elvállalod ezt a munkát?",
+    "confirmationPhrase":               "Biztosan elvállalod ezt a munkát:",
+    "PedInfoBox":                       "Nyomd meg az ~INPUT_CONTEXT~ gombot, hogy beszélj az ~c~asszisztenssel~s~.",
+    "YES":                              "Igen",
+    "NO":                               "Nem",
+    "notificationDesc":                 "You are now a ",
+    "notificationDescUnemployed":       "You are now unemployed",
+    "notifSubtitle":                    "Recruitment"
+}

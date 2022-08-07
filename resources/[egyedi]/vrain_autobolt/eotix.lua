@@ -1,0 +1,488 @@
+--------------------------------------------------------------------
+-------------------------Converted by Eotix#1337--------------------
+--------------------------------------------------------------------
+
+Eotix = {}
+
+local StringCharset = {}
+local NumberCharset = {}
+
+for i = 48,  57 do table.insert(NumberCharset, string.char(i)) end
+for i = 65,  90 do table.insert(StringCharset, string.char(i)) end
+for i = 97, 122 do table.insert(StringCharset, string.char(i)) end
+
+Eotix.RandomStr = function(length)
+	if length > 0 then
+		return Eotix.RandomStr(length-1) .. StringCharset[math.random(1, #StringCharset)]
+	else
+		return ''
+	end
+end
+
+Eotix.RandomInt = function(length)
+	if length > 0 then
+		return Eotix.RandomInt(length-1) .. NumberCharset[math.random(1, #NumberCharset)]
+	else
+		return ''
+	end
+end
+
+Eotix.SplitStr = function(str, delimiter)
+	local result = { }
+	local from  = 1
+	local delim_from, delim_to = string.find( str, delimiter, from  )
+	while delim_from do
+		table.insert( result, string.sub( str, from , delim_from-1 ) )
+		from  = delim_to + 1
+		delim_from, delim_to = string.find( str, delimiter, from  )
+	end
+	table.insert( result, string.sub( str, from  ) )
+	return result
+end
+
+
+
+-- Vehicles
+Eotix.Vehicles = {
+	['bjxl'] = {
+		['name'] = 'BJXL',
+		['brand'] = 'Karin',
+		['model'] = 'bjxl',
+		['price'] = 50000,
+		['category'] = 'suv',
+		['hash'] = `bjxl`,
+		['shop'] = 'pdm',
+	},
+	['mesa'] = {
+		['name'] = 'Mesa',
+		['brand'] = 'Canis',
+		['model'] = 'mesa',
+		['price'] = 35000,
+		['category'] = 'suv',
+		['hash'] = `mesa`,
+		['shop'] = 'pdm',
+	},
+	['seminole2'] = {
+		['name'] = 'Seminole',
+		['brand'] = 'Canis',
+		['model'] = 'seminole2',
+		['price'] = 40000,
+		['category'] = 'suv',
+		['hash'] = `seminole2`,
+		['shop'] = 'pdm',
+	},
+	['x6m'] = {
+		['name'] = 'X6M',
+		['brand'] = 'BMW',
+		['model'] = 'x6m',
+		['price'] = 185000,
+		['category'] = 'suv',
+		['hash'] = `x6m`,
+		['shop'] = 'pdm',
+	},
+	['g63'] = {
+		['name'] = 'G63',
+		['brand'] = 'Mercedes',
+		['model'] = 'g63',
+		['price'] = 275000,
+		['category'] = 'suv',
+		['hash'] = `g63`,
+		['shop'] = 'pdm',
+	},
+	['raptor2017'] = {
+		['name'] = 'Raptor',
+		['brand'] = 'Ford',
+		['model'] = 'raptor2017',
+		['price'] = 160000,
+		['category'] = 'suv',
+		['hash'] = `raptor2017`,
+		['shop'] = 'pdm',
+	},
+	['patriot'] = {
+		['name'] = 'Patriot',
+		['brand'] = 'Mammoth',
+		['model'] = 'patriot',
+		['price'] = 150000,
+		['category'] = 'suv',
+		['hash'] = `patriot`,
+		['shop'] = 'pdm',
+	},
+	['evoque'] = {
+		['name'] = 'Evoque',
+		['brand'] = 'Range Rover',
+		['model'] = 'evoque',
+		['price'] = 95000,
+		['category'] = 'suv',
+		['hash'] = `evoque`,
+		['shop'] = 'pdm',
+	},
+	['bobcatxl'] = {
+		['name'] = 'Bobcat XL',
+		['brand'] = 'Vapid',
+		['model'] = 'bobcatxl',
+		['price'] = 25000,
+		['category'] = 'suv',
+		['hash'] = `bobcatxl`,
+		['shop'] = 'pdm',
+	},
+	['cayenne18'] = {
+		['name'] = 'Cayenne S',
+		['brand'] = 'Porsche',
+		['model'] = 'cayenne18',
+		['price'] = 140000,
+		['category'] = 'suv',
+		['hash'] = `cayenne18`,
+		['shop'] = 'pdm',
+	},
+	['gburrito2'] = {
+		['name'] = 'Burrito',
+		['brand'] = 'Declasse',
+		['model'] = 'gburrito2',
+		['price'] = 60000,
+		['category'] = 'suv',
+		['hash'] = `gburrito2`,
+		['shop'] = 'pdm',
+	},
+	['bison'] = {
+		['name'] = 'Bison',
+		['brand'] = 'Bravado',
+		['model'] = 'bison',
+		['price'] = 40000,
+		['category'] = 'suv',
+		['hash'] = `bison`,
+		['shop'] = 'pdm',
+	},
+	['sim22'] = {
+		['name'] = 'Impreza',
+		['brand'] = 'Subaru',
+		['model'] = 'sim22',
+		['price'] = 250000,
+		['category'] = 'szuper',
+		['hash'] = `sim22`,
+		['shop'] = 'pdm',
+	},
+	['skyline'] = {
+		['name'] = 'Skyline R34',
+		['brand'] = 'Nissan',
+		['model'] = 'skyline',
+		['price'] = 160000,
+		['category'] = 'szuper',
+		['hash'] = `skyline`,
+		['shop'] = 'pdm',
+	},
+	['rs7'] = {
+		['name'] = 'RS7',
+		['brand'] = 'Audi',
+		['model'] = 'rs7',
+		['price'] = 180000,
+		['category'] = 'szuper',
+		['hash'] = `rs7`,
+		['shop'] = 'pdm',
+	},
+	['mgt'] = {
+		['name'] = 'Mustang GT',
+		['brand'] = 'Ford',
+		['model'] = 'mgt',
+		['price'] = 200000,
+		['category'] = 'szuper',
+		['hash'] = `mgt`,
+		['shop'] = 'pdm',
+	},
+	['gtr'] = {
+		['name'] = 'GT-R',
+		['brand'] = 'Nissan',
+		['model'] = 'gtr',
+		['price'] = 180000,
+		['category'] = 'szuper',
+		['hash'] = `gtr`,
+		['shop'] = 'pdm',
+	},
+	['m3e46'] = {
+		['name'] = 'M3 E46',
+		['brand'] = 'BMW',
+		['model'] = 'm3e46',
+		['price'] = 140000,
+		['category'] = 'szuper',
+		['hash'] = `m3e46`,
+		['shop'] = 'pdm',
+	},
+	['evo10'] = {
+		['name'] = 'Lancer Evolution X',
+		['brand'] = 'Mitsubishi',
+		['model'] = 'evo10',
+		['price'] = 170000,
+		['category'] = 'szuper',
+		['hash'] = `evo10`,
+		['shop'] = 'pdm',
+	},
+	['pts21'] = {
+		['name'] = '911',
+		['brand'] = 'Porsche',
+		['model'] = 'pts21',
+		['price'] = 220000,
+		['category'] = 'szuper',
+		['hash'] = `pts21`,
+		['shop'] = 'pdm',
+	},
+	['aventador'] = {
+		['name'] = 'Aventador',
+		['brand'] = 'Lamborghini',
+		['model'] = 'aventador',
+		['price'] = 220000,
+		['category'] = 'szuper',
+		['hash'] = `aventador`,
+		['shop'] = 'pdm',
+	},
+	['370z'] = {
+		['name'] = '370Z',
+		['brand'] = 'Nissan',
+		['model'] = '370z',
+		['price'] = 160000,
+		['category'] = 'szuper',
+		['hash'] = `370z`,
+		['shop'] = 'pdm',
+	},
+	['emperor'] = {
+		['name'] = 'Emperor',
+		['brand'] = 'Albany',
+		['model'] = 'emperor',
+		['price'] = 1500,
+		['category'] = 'sedan',
+		['hash'] = `emperor`,
+		['shop'] = 'pdm',
+	},
+	['warrener'] = {
+		['name'] = 'Warrener',
+		['brand'] = 'Vulcar',
+		['model'] = 'warrener',
+		['price'] = 5500,
+		['category'] = 'sedan',
+		['hash'] = `warrener`,
+		['shop'] = 'pdm',
+	},
+	['glendale2'] = {
+		['name'] = 'Glendale',
+		['brand'] = 'Benefactor',
+		['model'] = 'glendale2',
+		['price'] = 16000,
+		['category'] = 'sedan',
+		['hash'] = `glendale2`,
+		['shop'] = 'pdm',
+	},
+	['nightblade'] = {
+		['name'] = 'Nightblade',
+		['brand'] = 'Western Motorcycle Company',
+		['model'] = 'nightblade',
+		['price'] = 50000,
+		['category'] = 'motor',
+		['hash'] = `nightblade`,
+		['shop'] = 'pdm',
+	},
+	['manchez'] = {
+		['name'] = 'Manchez',
+		['brand'] = 'Maibatsu',
+		['model'] = 'manchez',
+		['price'] = 8000,
+		['category'] = 'motor',
+		['hash'] = `manchez`,
+		['shop'] = 'pdm',
+	},
+	['sanctus'] = {
+		['name'] = 'Sanctus',
+		['brand'] = 'Liberty City Cycles',
+		['model'] = 'sanctus',
+		['price'] = 70000,
+		['category'] = 'motor',
+		['hash'] = `sanctus`,
+		['shop'] = 'pdm',
+	},
+	['michelli'] = {
+		['name'] = 'Michelli',
+		['brand'] = 'Lampadati',
+		['model'] = 'michelli',
+		['price'] = 10000,
+		['category'] = 'klasszikus',
+		['hash'] = `michelli`,
+		['shop'] = 'pdm',
+	},
+	['dynasty'] = {
+		['name'] = 'Dynasty',
+		['brand'] = 'Weeny',
+		['model'] = 'dynasty',
+		['price'] = 12000,
+		['category'] = 'klasszikus',
+		['hash'] = `dynasty`,
+		['shop'] = 'pdm',
+	},
+	['chevelle67'] = {
+		['name'] = 'Chevelle szuper Sport',
+		['brand'] = 'Chevrolet',
+		['model'] = 'chevelle67',
+		['price'] = 150000,
+		['category'] = 'klasszikus',
+		['hash'] = `chevelle67`,
+		['shop'] = 'pdm',
+	},
+	['peyote3'] = {
+		['name'] = 'Peyote',
+		['brand'] = 'Vapid',
+		['model'] = 'peyote3',
+		['price'] = 9500,
+		['category'] = 'klasszikus',
+		['hash'] = `peyote3`,
+		['shop'] = 'pdm',
+	},
+	['retinue2'] = {
+		['name'] = 'Retinue',
+		['brand'] = 'Vapid',
+		['model'] = 'retinue2',
+		['price'] = 10000,
+		['category'] = 'klasszikus',
+		['hash'] = `retinue2`,
+		['shop'] = 'pdm',
+	},
+	['golfgti'] = {
+		['name'] = 'Golf GTI V',
+		['brand'] = 'Volkswagen',
+		['model'] = 'golfgti',
+		['price'] = 75000,
+		['category'] = 'kompakt',
+		['hash'] = `golfgti`,
+		['shop'] = 'pdm',
+	},
+	['weevil'] = {
+		['name'] = 'Weevil',
+		['brand'] = 'BF',
+		['model'] = 'weevil',
+		['price'] = 2000,
+		['category'] = 'kompakt',
+		['hash'] = `weevil`,
+		['shop'] = 'pdm',
+	},
+	['kanjo'] = {
+		['name'] = 'Kanjo',
+		['brand'] = 'Dinka',
+		['model'] = 'kanjo',
+		['price'] = 5500,
+		['category'] = 'kompakt',
+		['hash'] = `kanjo`,
+		['shop'] = 'pdm',
+	},
+	['brioso'] = {
+		['name'] = 'Brioso R/A',
+		['brand'] = 'Grotti',
+		['model'] = 'brioso',
+		['price'] = 10000,
+		['category'] = 'kompakt',
+		['hash'] = `brioso`,
+		['shop'] = 'pdm',
+	},
+	['issi3'] = {
+		['name'] = 'Issi',
+		['brand'] = 'Weeny',
+		['model'] = 'issi3',
+		['price'] = 4000,
+		['category'] = 'kompakt',
+		['hash'] = `issi3`,
+		['shop'] = 'pdm',
+	},
+	['Q7'] = {
+		['name'] = 'Q7',
+		['brand'] = 'Audi',
+		['model'] = 'Q7',
+		['price'] = 100000,
+		['category'] = 'suv',
+		['hash'] = `Q7`,
+		['shop'] = 'pdm',
+	},
+	['17ram3500'] = {
+		['name'] = 'RAM',
+		['brand'] = 'Dodge',
+		['model'] = '17ram3500',
+		['price'] = 200000,
+		['category'] = 'suv',
+		['hash'] = `17ram3500`,
+		['shop'] = 'pdm',
+	},
+	['ARG'] = {
+		['name'] = 'Guilia',
+		['brand'] = 'Alfa Romeo',
+		['model'] = 'ARG',
+		['price'] = 200000,
+		['category'] = 'kompakt',
+		['hash'] = `ARG`,
+		['shop'] = 'pdm',
+	},
+	['r8ppi'] = {
+		['name'] = 'R8',
+		['brand'] = 'Audi',
+		['model'] = 'r8ppi',
+		['price'] = 250000,
+		['category'] = 'szuper',
+		['hash'] = `r8ppi`,
+		['shop'] = 'pdm',
+	},
+	['rmodbentley1'] = {
+		['name'] = 'GT',
+		['brand'] = 'Bentley',
+		['model'] = 'rmodbentley1',
+		['price'] = 350000,
+		['category'] = 'szuper',
+		['hash'] = `rmodbentley1`,
+		['shop'] = 'pdm',
+	},
+	['rmodbmwm8'] = {
+		['name'] = 'M8',
+		['brand'] = 'BMW',
+		['model'] = 'rmodbmwm8',
+		['price'] = 300000,
+		['category'] = 'szuper',
+		['hash'] = `rmodbmwm8`,
+		['shop'] = 'pdm',
+	},
+	['rmodm4gts'] = {
+		['name'] = 'M4',
+		['brand'] = 'BMW',
+		['model'] = 'rmodm4gts',
+		['price'] = 300000,
+		['category'] = 'szuper',
+		['hash'] = `rmodm4gts`,
+		['shop'] = 'pdm',
+	},
+	['rmodmartin'] = {
+		['name'] = 'DBS Superleggera',
+		['brand'] = 'Aston Martin',
+		['model'] = 'rmodmartin',
+		['price'] = 250000,
+		['category'] = 'szuper',
+		['hash'] = `rmodmartin`,
+		['shop'] = 'pdm',
+	},
+	['rmodmk7'] = {
+		['name'] = 'Golf MK7',
+		['brand'] = 'Volkswagen',
+		['model'] = 'rmodmk7',
+		['price'] = 220000,
+		['category'] = 'szuper',
+		['hash'] = `rmodmk7`,
+		['shop'] = 'pdm',
+	},
+	['rmodrs6'] = {
+		['name'] = 'RS6',
+		['brand'] = 'Audi',
+		['model'] = 'rmodrs6',
+		['price'] = 335000,
+		['category'] = 'szuper',
+		['hash'] = `rmodrs6`,
+		['shop'] = 'pdm',
+	},
+	['rmodgt63'] = {
+		['name'] = 'GT63',
+		['brand'] = 'Mercedes',
+		['model'] = 'rmodgt63',
+		['price'] = 400000,
+		['category'] = 'szuper',
+		['hash'] = `rmodgt63`,
+		['shop'] = 'pdm',
+	},
+}

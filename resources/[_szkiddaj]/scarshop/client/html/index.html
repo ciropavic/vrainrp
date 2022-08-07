@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="./assets/css/style.css" />
+  </head>
+  <body>
+    <div class="description" id="description" style="display: none">
+      <div class="control" id="vehicle-name-parent">
+        <div class="icon"><i class="fas fa-car"></i></div>
+        <div class="name" id="vehicle-name">Declasse Ciganyaprito</div>
+      </div>
+      <div class="control" id="vehicle-price-parent">
+        <div class="icon"><i class="fas fa-dollar-sign"></i></div>
+        <div class="name" id="vehicle-price">1,350,000</div>
+      </div>
+    </div>
+
+    <div class="list" id="list" style="display: none">
+      <div class="message">Válassz járműkategóriát vagy gyártót!</div>
+
+      <div class="content">
+        <div class="categories" id="list-categories"></div>
+        <div class="manufacturers" id="list-manufacturers"></div>
+      </div>
+
+      <span class="showall" onclick="List.continue('skip')">Nyomd meg a kihagyáshoz.</span>
+    </div>
+
+    <div class="colorpicker" id="colorpicker" style="display: none">
+      <div class="palette">
+        <canvas class="block" id="colorpicker-block" width="230" height="180"></canvas>
+        <canvas class="strip" id="colorpicker-strip" width="34" height="180"></canvas>
+      </div>
+
+      <div class="default-colors">
+        <div class="color" style="--color: rgba(0, 0, 0, 1)" onclick="useDefaultColor(this)"></div>
+        <div
+          class="color"
+          style="--color: rgba(255, 255, 255, 1)"
+          onclick="useDefaultColor(this)"
+        ></div>
+
+        <div
+          class="color"
+          style="--color: rgba(255, 201, 31, 1)"
+          onclick="useDefaultColor(this)"
+        ></div>
+        <div
+          class="color"
+          style="--color: rgba(192, 14, 26, 1)"
+          onclick="useDefaultColor(this)"
+        ></div>
+        <div
+          class="color"
+          style="--color: rgba(40, 44, 77, 1)"
+          onclick="useDefaultColor(this)"
+        ></div>
+        <div
+          class="color"
+          style="--color: rgba(249, 164, 88, 1)"
+          onclick="useDefaultColor(this)"
+        ></div>
+        <div
+          class="color"
+          style="--color: rgba(131, 197, 102, 1)"
+          onclick="useDefaultColor(this)"
+        ></div>
+      </div>
+
+      <div class="content">
+        <div class="preview" id="color-label" style="--color: rgb(0, 0, 0)"></div>
+        <div class="controls">
+          <div class="control" onclick="Colorpicker.submit()">Mentés</div>
+          <div class="control" onclick="Colorpicker.close()">Bezárás</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls" id="controls" style="display: none">
+      <div class="control">
+        <div class="key"><i class="fas fa-chevron-left"></i></div>
+        <div class="name">Előző</div>
+      </div>
+      <div class="control">
+        <div class="key"><i class="fas fa-chevron-right"></i></div>
+        <div class="name">Következő</div>
+      </div>
+      <div class="control">
+        <div class="key">C</div>
+        <div class="name">Szín választása</div>
+      </div>
+      <div class="control">
+        <div class="key"><i class="fas fa-level-down-alt"></i></div>
+        <div class="name">Vásárlás</div>
+      </div>
+      <div class="control">
+        <div class="key" style="--size: 8pt">ESC</div>
+        <div class="name">Kilépés</div>
+      </div>
+    </div>
+
+    <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+    <script src="./assets/js/script.js"></script>
+    <script src="./assets/js/main.js"></script>
+    <script src="./assets/js/list.js"></script>
+    <script src="./assets/js/colorpicker.js"></script>
+  </body>
+</html>

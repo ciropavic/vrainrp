@@ -1,0 +1,61 @@
+.description {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+
+  height: 42px;
+
+  padding: 0pt 14pt;
+  background: rgb(14, 14, 14);
+
+  border-radius: 2pt;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 100%;
+
+    .icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      float: left;
+
+      width: 22px;
+      height: 22px;
+
+      background: white;
+      border-radius: 2pt;
+      margin-right: 6pt;
+
+      font-family: "Open Sans";
+      font-weight: 600;
+      font-size: var(--size);
+    }
+
+    .name {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      height: 100%;
+      float: right;
+
+      color: white;
+
+      font-family: "Open Sans", sans-serif;
+      font-size: 12pt;
+    }
+  }
+
+  .control:not(:last-child) {
+    margin-right: 24pt;
+  }
+}

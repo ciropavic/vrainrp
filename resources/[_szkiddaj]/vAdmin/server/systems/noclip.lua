@@ -1,0 +1,11 @@
+-- local NoclipStates = {};
+
+-- RegisterCommand('noclip', function(player)
+--     if (not NoclipStates[player]) then 
+--         NoclipStates[player] = true;
+--         TriggerClientEvent('vAdmin:toggle', true);
+--     else 
+--         NoclipStates[player] = nil;
+--         TriggerClientEvent('vAdmin:toggle', false);
+--     end 
+-- end, true);

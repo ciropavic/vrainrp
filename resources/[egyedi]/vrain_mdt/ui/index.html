@@ -1,0 +1,701 @@
+<html style="overflow-y: hidden;">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" type="text/css" href="styles/police.css">
+	<link rel="stylesheet" type="text/css" href="bootstrap.css" >
+	<link rel="stylesheet" href="croppie.css" />
+    <style>
+        body {
+            display: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div v-bind:class="getClass('content')">
+            <div v-bind:class="getClass('line')" style="top: 10%;"></div>
+            <img src="badges/police.png" style="position: fixed; display: inline-block; left: 2%; top: 1.5%; max-width: 200px; height: auto;">          
+            <p style="font-family: 'Calibri'; font-size: 20pt; text-align: center;">KÖZPONTI ADAT VEZÉRLÉS</p>
+            <p class="lead" style="position: fixed; left: 17%; top: 5.5%; font-family: 'Calibri';">Üdv, {{ officer.rank }}{{officer.name }}.</p>
+            <button class="btn-primary btn btn-sm shadow-none" type="button" v-on:click="closeMDT()" style="position: fixed; right: 10%; top: 5.5%">LOGOUT</button>
+
+            <div style="position: fixed; left: 16%; top: 10.5%;">
+                <ul>
+                    <li v-on:click="changePage('Home')" id="home" >Főoldal</li>
+                    <li v-on:click="changePage('Search Offenders')" id="search-offenders" >Személy keresés</li>
+                    <li v-on:click="changePage('Search Vehicles')" id="search-vehicles" >Jármű keresés</li>
+                    <li v-on:click="changePage('Search Reports')" id="search-reports" >Jelentés keresés</li>
+                    <li v-on:click="changePage('Submit Report')" id="submit-report" >Jelentés készítés</li>
+                    <li v-on:click="changePage('Calls')" id="calls" >Hívások</li>
+                    <li v-on:click="changePage('Warrants')" id="warrants" >Leírások</li>
+                </ul>
+            </div>
+
+            <main id="main" style="height: 550px;">
+                <div v-if="page == 'Home'">
+					<h2 class="page-title">FŐOLDAL</h2>
+					<div class="container px-4">						
+						<div class="row gx-5 gy-5">
+							<div class="col">
+								<div class="p-3 background-color rounded-corners" >
+									<h3>LEGÚJABB JELENTÉSEK</h3>
+									<br />
+									<h4 v-if="homepage.reports == false"> - </h4>
+									<span v-if="homepage.reports" v-for="result in homepage.reports">
+										<h4 style="font-size: 12px; margin-bottom: 3px;"> {{ result.date }} - ID: {{ result.id }} </h4>
+										<button class="btn-primary btn btn-sm shadow-none" type="button" v-on:click="report_selected = result; changePage('Search Reports');" style="margin-bottom: 10px; width: 100%; padding: unset;"> {{ result.title }} </button>
+										<br />
+									</span>
+								</div>
+							</div>
+							<div class="col">
+								<div class="p-3 background-color rounded-corners">
+									<h3>LEGÚJABB LEÍRÁSOK</h3>
+									<br />
+									<h4 v-if="homepage.warrants == false"> - </h4>
+									<span v-else-if="homepage.warrants != false" v-for="warrant in homepage.warrants">
+										<h4 style="font-size: 12px; margin-bottom: 3px;"> {{ warrant.date }} - ID: {{ warrant.id }} </h4>
+										<button class="btn-primary btn btn-sm shadow-none" type="button" v-on:click="warrant_selected = warrant; changePage('Warrant Details');" style="margin-bottom: 10px; width: 100%; padding: unset;"> {{ warrant.name }} </button>
+										<br />
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="row gx-5 gy-5" style="margin-top:0px; min-height: 20em;">
+							<div class="col">
+								<div class="p-3 background-color rounded-corners">
+									<h3>SZEMÉLY KERESÉSEK</h3>
+									<br />
+									<h4 v-if="recent_searches.person.length == 0"> - </h4>
+									<span v-else-if="recent_searches.person.length > 0" v-for="person in recent_searches.person">
+										<button class="btn-primary btn btn-sm shadow-none" type="button" v-on:click="OpenOffenderDetailsById(person.id);" style="margin-bottom: 10px; width: 100%; padding: unset;"> {{ person.firstname }}  {{person.lastname}} </button>
+										<br />
+									</span>
+								</div>
+							</div>
+							<div class="col">
+								<div class="p-3 background-color rounded-corners">
+									<h3>JÁRMŰ KERESÉSEK</h3>
+									<br />
+									<h4 v-if="recent_searches.vehicle.length == 0"> - </h4>
+									<span v-else-if="recent_searches.vehicle.length > 0" v-for="vehicle in recent_searches.vehicle">
+										<button class="btn-primary btn btn-sm shadow-none" type="button" v-on:click="OpenVehicleDetails(vehicle);" style="margin-bottom: 10px; width: 100%; padding: unset;"> {{ vehicle.plate }} </button>
+										<br />
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+                    <!--<div style="bottom: 0%; position: absolute; margin: 0 auto; width: 100%;">
+                        <br />
+                        <button type="button" v-on:click="homepage.button_press = homepage.button_press + 1;">CLICK ME: {{homepage.button_press}}</button>
+                    </div>-->
+                </div>
+
+                <div v-if="page == 'Search Reports'">
+
+                    <h2 class="page-title">ADATBÁZIS KERESÉS</h2>
+					<div class="container">
+						<div class="row">
+							<el-form @keyup.enter.native>
+								<div class="form-floating mb-3">
+									<input id="floatingInput" class="form-control" v-on:keyup.enter="ReportSearch()" v-model="report_search" type="text" placeholder="Név vagy Jelentés ID" required>
+									<button class="btn-primary btn btn-sm shadow-none" v-on:click="ReportSearch()" type="button" >KERESÉS</button>
+									<label for="floatingInput">Név vagy Jelentés ID</label>
+								</div>
+							</el-form>
+							
+							<br />
+
+							<div class="col-md-6" style="max-height: 700px; text-align:left;">
+								<h3>DÁTUM</h3>
+								<h4 v-if="report_selected.date"> {{ report_selected.date }} </h4>
+								<h4 v-else-if="report_selected.date == null"> ... </h4>
+								<h3>NÉV</h3>
+								<h4 v-if="report_selected.name" v-on:click="OpenOffenderDetailsById(report_selected.char_id);" v-bind:class="getClass('clickable')" v-on:click="modal = null"> {{ report_selected.name }} </h4>
+								<h4 v-else-if="report_selected.name == null"> ... </h4>
+								<h3>INCIDENS #{{ report_selected.id}}</h3>
+								<h4 v-if="report_selected.title"> {{ report_selected.title }} </h4>
+								<h4 v-else-if="report_selected.title == null"> ... </h4>
+								<h3>DÍJ</h3>
+								<h4 v-if="report_selected.charges == null"> ... </h4>
+								<span v-for="(amount, offense in report_selected.charges" :key="offense">
+									<h4>
+										{{ offense }} (x{{ amount }})
+									</h4>
+								</span>
+								<h3>ESEMÉNYTISZT</h3>
+								<h4 v-if="report_selected.author"> {{ report_selected.author }} </h4>
+								<h4 v-else-if="report_selected.author == null"> ... </h4>
+								<br />
+								<button class="btn-primary btn btn-sm shadow-none" v-if="report_selected.date" type="button" v-on:click="changePage('Report Details')" id="report-details" >JELENTÉS MEGTEKINTÉSE</button>
+								<button class="btn-primary btn btn-sm shadow-none" v-if="report_selected.date" type="button" v-on:click="changePage('Submit Report'); report_new.charges = report_selected.charges; report_new.title = report_selected.title; report_new.incident = report_selected.incident;" id="report-details" >JELENTÉS MÁSOLÁSA</button>
+								<button class="btn-primary btn btn-sm shadow-none" v-if="report_selected.date" type="button" v-on:click="changePage('Submit Warrant'); warrant_new.report_id = report_selected.id; warrant_new.char_id = report_selected.char_id; warrant_new.report_title = report_selected.title; warrant_new.name = report_selected.name; warrant_new.charges = report_selected.charges;" >NEW WARRANT</button>
+								<button class="btn-primary btn btn-sm shadow-none" type="button" v-on:click="changePage('Submit Report')" >ÚJ JELENTÉS</button>
+							</div>
+
+							<div class="col-md-6" style="max-height: 700px;">
+								<div v-if="report_results.results" style="margin-right: 10px;">
+									<h3>KERESÉSI EREDMÉNYEK</h3>
+									<h4 style="margin: 10px 1px 30px 1px;">Találatok a következőre: '{{ report_results.query }}'...</h4>
+									<span v-if="report_results.results" v-for="result in report_results.results">
+										<h4 style="font-size: 12px; margin-bottom: 3px;"> {{ result.date }} - ID: {{ result.id }} </h4>
+										<button class="btn-primary btn btn-sm shadow-none" type="button" v-on:click="report_selected = result;" style="margin-bottom: 10px; width: 100%; padding: unset;"> {{ result.title }} </button>
+										<br />
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+                </div>
+                <div v-if="page == 'Submit Report'">
+                    
+                    <h2 class="page-title">ÚJ JELENTÉS</h2>
+					<div class="container">
+						<div class="row">
+							<div class="col-md-6" style="max-height:700px; overflow:auto; text-align:left;">
+								<el-form @keyup.enter.native>
+									<h3>NÉV</h3>
+									<h4 v-if="report_new.name" style="font-size: 14px;"> {{ report_new.name }} </h4>
+									<h4 v-else-if="report_new.name == null"> ... </h4>
+									<h3>INCIDENS</h3>
+									<div class="form-floating mb-3">
+										<input id="floatingInput" class="form-control" v-on:keyup.enter="SubmitNewReport()" v-model="report_new.title" style="font-size: 14px;" type="text" placeholder="Írd be a jelentés tárgyát" class="report-input" required>
+										<label for="floatingInput">Írd be a jelentés tárgyát</label>
+									</div>
+									
+									<h3>RÉSZLETEK</h3>
+									
+									<div class="form-floating">					
+										<textarea style="height: 200px" v-model="report_new.incident" class="form-control" :class="getClass('textarea')" cols="54" placeholder="Írd be a jelentés leírását" onkeypress='this.style.height = "";this.style.height = this.scrollHeight + "px"' required>
+										</textarea>
+										<label for="floatingInput">Írd be a jelentés leírását</label>
+									</div>
+									
+									<h3>DÍJ</h3>
+									<h4 v-if="Object.keys(report_new.charges).length == 0"> ... </h4>
+									<span v-for="(amount, offense in report_new.charges" :key="offense">
+										<h4 style="font-size: 14px;">
+											<span v-on:click="RemoveCharge(offense)" class="remove badge rounded-pill bg-primary" >{{ offense }} (x{{ amount }})</span>
+										</h4>
+									</span>
+									<h4 v-if="report_new.recommended_fine > 0">Fine: ${{report_new.recommended_fine}}</h4>
+									<br />
+									<button class="btn-primary btn btn-sm shadow-none" v-if="report_new.char_id && report_new.incident && report_new.title" v-on:click="SubmitNewReport()" type="button" style="margin-top: 20px">SUBMIT REPORT</button>
+									<button class="btn-primary btn btn-sm shadow-none" v-if="report_new.focus == 'charges'" v-on:click="report_new.focus = 'name'" type="button" style="margin-top: 20px">SEARCH OFFENDER</button>
+									<button class="btn-primary btn btn-sm shadow-none" v-if="report_new.focus == 'name'" v-on:click="report_new.focus = 'charges'" type="button" style="margin-top: 20px">SEARCH CHARGES</button>
+								</el-form>
+							</div>
+
+							<div class="col-md-6" style="top: 20%; max-height:700px; overflow:auto;">
+								<div v-if="report_new.focus == 'name'">
+									<h3 style="margin: 10px 0px">SZABÁLYSÉRTÉSEK KERESÉSE</h3>
+									<el-form @keyup.enter.native>
+										<div class="form-floating mb-3">
+											<input id="floatingInput" class="form-control" v-model="offender_search" type="text" placeholder="Teljes vagy névrészlet" required>
+											<button class="btn-primary btn btn-sm shadow-none" v-on:click="OffenderSearch()" type="button" >KERESÉS</button>
+											<label for="floatingInput">Teljes vagy névrészlet</label>
+										</div>
+									</el-form>
+
+									<div v-if="offender_results.query" style="top: 20%; max-height:700px; overflow:auto;">
+										<h3>KERESÉSI EREDMÉNYEK</h3>
+										<h4 style="margin: 10px 1px 30px 1px;">Találatok a következőre: '{{ offender_results.query }}'...</h4>
+										<span v-if="offender_results.results" v-for="offender in offender_results.results">
+											<button class="btn-primary btn btn-sm shadow-none" type="button" v-on:click="report_new.char_id = offender.id; report_new.name = offender.firstname + ' ' + offender.lastname; report_new.focus='charges'" style="margin-bottom: 10px; width: 100%; padding: unset;">{{ offender.firstname }} {{ offender.lastname }}</button>
+											<br />
+										</span>
+									</div>
+								</div>
+
+								<div v-else-if="report_new.focus == 'charges'">
+									<h3 style="margin: 10px 0px">SZÁMLÁK KERESÉSE</h3>
+									<div v-if="offenses" style="margin-right: 10px; overflow:auto;">
+										<el-form @keyup.enter.native>
+											<div class="form-floating mb-3">
+												<input id="floatingInput" class="form-control" v-on:keyup.enter="AddCharge(offense.id)" v-model="report_new.charges_search" type="text" placeholder="Filter" style="width: 100%;" required>
+												<label for="floatingInput">Szűrés</label>
+											</div>
+										</el-form>
+										<span v-for="offense in filtered_offenses">
+											<button class="btn-primary btn btn-sm shadow-none" type="button" v-on:click="AddCharge(offense.id)" style="width: 100%;">{{ offense.label }}</button>
+											<br />
+										</span>
+									</div>
+									<h4 v-else-if="offenses == false">Számlák betöltése...</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+                </div>
+
+                <div v-if="page == 'Search Offenders'">
+
+                    <h2 class="page-title">ADATBÁZIS KERESÉS</h2>
+					<div class="container">
+						<el-form @keyup.enter.native>
+							<div class="form-floating mb-3">
+								<input id="floatingInput" class="form-control" v-on:keyup.enter="OffenderSearch()" v-model="offender_search" type="text" placeholder="Teljes vagy névrészlet" required>
+								<button class="btn-primary btn btn-sm shadow-none" v-on:click="OffenderSearch()" type="button" >KERESÉS</button>
+								<label for="floatingInput">Teljes vagy névrészlet</label>
+							</div>
+						</el-form>
+						
+						<br />
+					
+						<div class="row">
+							<div class="col-md-6" style="max-height: 700px; text-align:left;">
+								<h3>NÉV</h3>
+								<h4 v-if="offender_selected.firstname"> {{ offender_selected.firstname }} {{ offender_selected.lastname }} </h4>
+								<h4 v-else-if="offender_selected.name == null"> ... </h4>
+								<h3 v-if="offender_selected.firstname == null || offender_selected.notes || offender_selected.haswarrant || offender_selected.bail">LEÍRÁSOK</h3>
+								<h4 v-if="offender_selected.notes"> {{ offender_selected.notes }} </h4>
+								<h4 style="color:#dc3545!important; font-weight:bold!important;" v-if="offender_selected.haswarrant" v-bind:class="getClass('important')"> {{ offender_selected.firstname}} {{offender_selected.lastname}} egy aktív figyelmeztetés. </h4>
+								<h4 v-if="offender_selected.bail" v-bind:class="getClass('important')"> {{ offender_selected.firstname}} {{offender_selected.lastname}} óvadékon van. </h4>
+								<h4 v-if="offender_selected.firstname == null"> ... </h4>
+								<h3>TELEFONSZÁM</h3>
+								<h4 v-if="offender_selected.phone_number"> {{offender_selected.phone_number}} </h4>
+								<h4 v-else-if="offender_selected.phone_number == null"> ... </h4>
+								<h3 v-if="offender_selected.firstname == null || offender_selected.licenses">ENGEDÉLYEK</h3>
+								<h4 v-if="offender_selected.firstname == null"> ... </h4>
+								<span v-else-if="offender_selected.licenses" v-for="license in offender_selected.licenses">
+									<h4>{{ license.label }}</h4>
+								</span>
+								<h3>SZÜLETÉSI DÁTUM</h3>
+								<h4 v-if="offender_selected.dateofbirth"> {{ offender_selected.dateofbirth }} </h4>
+								<h4 v-else-if="offender_selected.dateofbirth == null"> ... </h4>
+								<h3 v-if="offender_selected.firstname == null || (offender_selected.convictions != null && Object.keys(offender_selected.convictions).length > 0)">MEGGYŐZŐDÉSEK</h3>
+								<h4 v-if="offender_selected.firstname == null"> ... </h4>
+								<span v-else-if="offender_selected.convictions" v-for="(value, name) in offender_selected.convictions">
+									<h4>{{ name }} x{{ value }}</h4>
+								</span>
+								<br />
+								<button class="btn-primary btn btn-sm shadow-none" v-if="offender_selected.firstname" type="button" v-on:click="modal = 'edit_offender'" id="edit-offender">PROFIL MÓDOSÍTÁS</button>
+								<button class="btn-primary btn btn-sm shadow-none" id="vehiclelist" v-if="Object.keys(offender_selected.vehicles).length > 0" type="button" v-on:click="modal = 'vehiclelist'"data-target="#vehiclemodal" >VEHICLES</button>
+								<button class="btn-primary btn btn-sm shadow-none" v-if="offender_selected.firstname" type="button" v-on:click="changePage('Submit Report'); report_new.char_id = offender_selected.id; report_new.name = offender_selected.firstname + ' ' + offender_selected.lastname; report_new.focus = 'charges'" >ÚJ JELENTÉS</button>
+							</div>
+
+							<div class="col-md-6" style="max-height: 700px;">
+								<div v-if="offender_results.query" style="margin-right: 10px;">
+									<h3>KERESÉSI EREDMÉNYEK</h3>
+									<h4 style="margin: 10px 1px 30px 1px;">Találatok a következőre: '{{ offender_results.query }}'...</h4>
+									<span v-if="offender_results.results" v-for="offender in offender_results.results">
+										<button class="btn-primary btn btn-sm shadow-none" type="button" v-on:click="OpenOffenderDetails(offender.id)" style="margin-bottom: 10px; width: 100%; padding: unset;">{{ offender.firstname }} {{ offender.lastname }}</button>
+										<br />
+									</span>
+								</div>
+
+								<div v-else-if="offender_results.results == false">
+									<span v-if="offender_selected.bail" v-bind:class="getClass('img-block')">ÓVADÉK</span>
+									<span v-if="offender_selected.haswarrant" v-bind:class="getClass('img-block')" style="top: 36%;">FIGYELMEZTETÉS</span>
+									<img v-if="offender_selected.mugshot_url" v-bind:src="offender_selected.mugshot_url" alt="mugshot" v-bind:class="getClass('mugshot')">
+									<img v-else-if="offender_selected.mugshot_url == ''" src="mugshot.png" alt="mugshot" v-bind:class="getClass('mugshot')">
+									<br>
+									<button v-if="offender_selected.name" class="btn-primary btn btn-sm shadow-none" type="button" >MUGSHOT</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+                    <div class="modal" id="vehiclemodal" v-if="modal == 'vehiclelist'">
+                        <div v-bind:class="getClass('modal-content')" style="width: 50%; padding: 15px; margin-top: 120px;">
+                            <span v-bind:class="getClass('close')" v-on:click="modal = null"><i class="fas fa-times"></i></span>
+                            <h3 style="text-align: left; margin: 0; padding: 0; margin-bottom: 15px;">JÁRMŰVEK</h3>
+                            <div style="max-height: 68%; overflow-y: auto; margin-right: 10px;">
+                                <table style="width: 95%;">
+                                    <tr>
+                                        <th>Rendszám</th>
+                                        <th>Modell</th>
+                                        <th>Szín</th>
+                                    </tr>
+                                    <tr v-for="vehicle in offender_selected.vehicles" v-on:click="OpenVehicleDetails(vehicle)">
+                                        <td>{{vehicle.plate}}</td>
+                                        <td>{{vehicle.model}}</td>
+                                        <td>{{vehicle.color}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal" id="offendermodal" v-if="modal == 'edit_offender'">
+						console.log("Is this thing on?")
+						<div v-bind:class="getClass('modal-content')" style="width: 50%; padding: 15px; margin-top: 120px; height: auto; text-align: left;">
+							<span v-bind:class="getClass('close')" v-on:click="modal = null"><i class="fas fa-times"></i></span>
+							<h3 style="text-align: left; margin: 0; padding: 0; margin-bottom: 15px;">RÉSZLETEK SZERKESZTÉSE</h3>
+		                    <br />
+		                    <div style="max-height: 55%; overflow-y: auto;">
+		                        <el-form @keyup.enter.native>
+		                            <h3>NOTES</h3>
+		                            <input id="floatingInput" class="form-control" v-model="offender_changes.notes" class="no-select" type="text" v-bind:placeholder="offender_selected.notes">
+		                            <h3 style="margin-top: 20px">MUGSHOT URL</h3>
+		                            <input id="floatingInput" class="form-control" v-model="offender_changes.mugshot_url" type="text" v-bind:placeholder="offender_selected.mugshot_url">
+		                            <br />
+		                            <button class="btn-primary btn btn-sm shadow-none" v-if="offender_changes.bail == true" type="button" style="margin: 10px 0;" v-on:click="offender_changes.bail = false">ÓVADÉKON</button>
+		                        	<button class="btn-primary btn btn-sm shadow-none" v-else-if="offender_changes.bail == false" type="button" style="margin: 10px 0;" v-on:click="offender_changes.bail = true">NINCS ÓVADÉKON</button>
+		                            <h3 style="margin-top: 20px">ENGEDÉLYEK</h3>
+		                            <h4 v-if="offender_changes.licenses == false"> ... </h4>
+		                            <span v-else-if="offender_changes.licenses" v-for="license in offender_changes.licenses">
+		                                <h4>
+		                                    <span v-on:click="RemoveLicense(license)" class="remove badge rounded-pill bg-primary">{{ license.label }}</span> 
+		                                    
+		                                </h4>
+		                            </span>
+		                            <br />
+		                        </el-form>
+		                        <h3>MEGGYŐZŐDÉSEK</h3>
+		                        <h4 v-if="offender_changes.convictions == null || (offender_changes.convictions && Object.keys(offender_changes.convictions).length == 0)"> ... </h4>
+		                        <span v-else-if="offender_changes.convictions" v-for="(value, name) in offender_changes.convictions">
+		                            <h4>
+		                                <span v-on:click="RemoveConviction(name)" class="remove badge rounded-pill bg-primary">{{ name }} x{{ value }}</span> 
+		                                
+		                            </h4>
+		                        </span>
+		                        <br />
+		                    </div>
+		                    <button class="btn-primary btn btn-sm shadow-none" type="button" v-on:click="SaveOffenderChanges()" style="margin-top: 10px;">VÁLTOZÁSOK MENTÉSE</button>
+						</div>
+                    </div>
+                </div>
+
+                <div v-if="page == 'Report Details'">
+                    <h2 class="page-title">JELENTÉS RÉSZLETEI</h2>
+                    <br />
+                    <div class="left-side" style="max-width: 1000px; float: unset; margin: 0 auto; max-height: 475px;">
+                        <h3>DÁTUM</h3>
+                        <h4 v-if="report_selected.date"> {{ report_selected.date }} </h4>
+                        <h4 v-else-if="report_selected.date == null"> ... </h4>
+                        <h3>NÉV</h3>
+                        <h4 v-if="report_selected.name" v-on:click="OpenOffenderDetailsById(report_selected.char_id)" v-bind:class="getClass('clickable')"> {{ report_selected.name }} </h4>
+                        <h4 v-else-if="report_selected.name == null"> ... </h4>
+                        <template v-if="report_edit.enable == false">
+                            <h3>INCIDENS #{{report_selected.id}}</h3>
+                            <h4 v-if="report_selected.title"> {{ report_selected.title }} </h4>
+                            <h4 v-else-if="report_selected.title == null"> ... </h4>
+                        </template>
+                        <template v-else-if="report_edit.enable == true">
+                            <h3>INCIDENS #{{report_selected.id}} (SZERKESZTÉS)</h3>
+                            <input id="floatingInput" class="form-control" v-model="report_edit.data.title" type="text" placeholder="Írd be a jelentés tárgyát" v-bind:class="getClass('report-input')" style="font-size: 14px;" required>
+                        </template>
+                        <template v-if="report_edit.enable == false">
+                            <h3>RÉSZLETEK</h3>
+                            <h4 v-if="report_selected.incident" style="white-space: pre-line; white-space: pre-wrap;">{{ report_selected.incident }}</h4>
+                            <h4 v-else-if="report_selected.incident == null"> ... </h4>
+                        </template>
+                        <template v-else-if="report_edit.enable == true">
+                            <h3>RÉSZLETEK (MÓDOSÍTÁS)</h3>
+                            <el-form @keyup.enter.native>
+                                <textarea v-model="report_edit.data.incident" class="form-control" :class="getClass('textarea')" onfocus='this.style.height = "";this.style.height = this.scrollHeight + "px"' onkeypress='this.style.height = "";this.style.height = this.scrollHeight + "px"' placeholder="Írd be a jelentés leírását" required>
+                                </textarea>
+                            </el-form>
+                        </template>
+                        <h3>SZÁMLÁK</h3>
+                        <span v-for="(amount, offense) in report_selected.charges" :key="offense">
+                            <h4>
+                                {{ offense }} (x{{ amount }})
+                            </h4>
+                        </span>
+                        <h3>ESEMÉNYTISZT</h3>
+                        <h4 v-if="report_selected.author"> {{ report_selected.author }} </h4>
+                        <h4 v-else-if="report_selected.author == null"> ... </h4>
+                        <br />
+                        <button class="btn-primary btn btn-sm shadow-none" type="button" v-on:click="changePage('Search Reports')" id="search-reports" >VISSZA A JELENTÉSEKHEZ</button>
+                        <button class="btn-primary btn btn-sm shadow-none" v-if="report_edit.enable == false" type="button" v-on:click="ToggleReportEdit()" >SZERKESZTÉS</button>
+                        <button class="btn-primary btn btn-sm shadow-none" v-if="report_edit.enable == false" type="button" v-on:click="DeleteSelectedReport()" >TÖRLÉS</button>
+                        <template v-else-if="report_edit.enable">
+                            <button class="btn-primary btn btn-sm shadow-none" type="button" v-if="report_edit.data.incident && report_edit.data.title" v-on:click="SaveReportEditChanges();" >MENTÉS</button>
+                            <button class="btn-primary btn btn-sm shadow-none" type="button" v-on:click="ToggleReportEdit();" >CANCEL</button>
+                        </template>
+                    </div>
+                </div>
+
+                <div v-if="page == 'Warrants'">
+                    <h2 class="page-title">AKTÍV FIGYELMEZTETÉSEK</h2>
+					<div class="container">
+						<el-form @keyup.enter.native>
+							<div class="form-floating mb-3">
+								<input id="floatingInput" class="form-control" v-model="warrant_search" type="text" placeholder="Filter" required>
+
+								<label for="floatingInput">Figyelmeztetési filterek</label>
+							</div>
+						</el-form>
+						<br />
+
+						<div style="max-width: 1000px; width: 1000px; float: unset; margin: 0 auto;">
+							<table v-if="filtered_warrants.length > 0" style="margin: 0 auto;">
+								<tr>
+									<th>Név</th>
+									<th>Jelentés</th>
+									<th>Kiadás dátuma</th>
+									<th style="column-width: 140px;">Lejárati dátum</th>
+								</tr>
+								<tr v-for="warrant in filtered_warrants" v-on:click="changePage('Warrant Details'); warrant_selected = warrant;">
+									<td>{{warrant.name}}</td>
+									<td style="overflow: hidden; text-overflow: ellipsis; max-width: 500px; max-height: 10px;">{{warrant.report_title}}</td>
+									<td>{{warrant.date}}</td>
+									<td style="padding: 5px;">{{warrant.expire_time}}</td>
+								</tr>
+							</table>
+							<h4 v-else-if="filtered_warrants.length == 0" style="text-align: center; font-size: 20px; font-weight: bold;"><br />No warrants found!</h4>
+							<div style="bottom: 0%">
+								<button class="btn-primary btn btn-sm shadow-none" v-on:click="changePage('Submit Warrant')" type="button" style="margin-top: 30px;">NEW WARRANT</button>
+							</div>
+						</div>
+					</div>
+                </div>
+
+                <div v-if="page == 'Search Vehicles'">
+                    <h2 class="page-title">ADATBÁZIS KERESÉS</h2>
+					<div class="container">
+						<div class="row">
+							<el-form @keyup.enter.native>
+								<div class="form-floating mb-3">
+									<input id="floatingInput" class="form-control" v-on:keyup.enter="VehicleSearch()" v-model="vehicle_search" type="text" placeholder="Teljes vagy részlet rendszám" required>
+									<button class="btn-primary btn btn-sm shadow-none" v-on:click="VehicleSearch()" type="button" >KERESÉS</button>
+									<label for="floatingInput">Full or partial plate</label>
+								</div>
+								
+							</el-form>
+							
+							<br />
+
+							<div class="col-md-6" style="text-align: left;">
+								<h3>RENDSZÁM</h3>
+								<h4 v-if="vehicle_selected.plate"> {{vehicle_selected.plate}} </h4>
+								<h4 v-else-if="vehicle_selected.plate == null"> ... </h4>
+								<h3>TÍPUS</h3>
+								<h4 v-if="vehicle_selected.type"> {{vehicle_selected.type}} </h4>
+								<h4 v-else-if="vehicle_selected.type == null"> ... </h4>
+								<h3 v-if="vehicle_selected.plate == null || vehicle_selected.notes || vehicle_selected.haswarrant || vehicle_selected.bail || vehicle_selected.stolen">LEÍRÁSOK</h3>
+								<h4 v-if="vehicle_selected.notes"> {{vehicle_selected.notes}}</h4>
+								<h4 style="color:#dc3545!important; font-weight:bold!important;" v-if="vehicle_selected.haswarrant">{{vehicle_selected.owner}} egy aktív figyelmeztetése van.</h4>
+								<h4 v-if="vehicle_selected.bail">{{vehicle_selected.owner}} óvadékon van.</h4>
+								<h4 v-if="vehicle_selected.stolen">Ez a jármű lopottnak lett elkönyvelve.</h4>
+								<h4 v-else-if="vehicle_selected.plate == null"> ... </h4>
+								<h3>TULAJDONOS</h3>
+								<h4 v-if="vehicle_selected.owner" v-on:click="OpenOffenderDetailsById(vehicle_selected.owner_id)" v-bind:class="getClass('clickable')"> {{vehicle_selected.owner}} </h4>
+								<h4 v-else-if="vehicle_selected.owner == null"> ... </h4>
+								<h3>MODELL</h3>
+								<h4 v-if="vehicle_selected.model"> {{vehicle_selected.model}} </h4>
+								<h4 v-else-if="vehicle_selected.model == null"> ... </h4>
+								<h3>SZÍN</h3>
+								<h4 v-if="vehicle_selected.color"> {{vehicle_selected.color}} </h4>
+								<h4 v-else-if="vehicle_selected.color == null"> ... </h4>
+								<button class="btn-primary btn btn-sm shadow-none" v-if="vehicle_selected.plate" type="button" v-on:click="modal = 'edit_vehicle'; edit_vehicle.notes = vehicle_selected.notes; edit_vehicle.stolen = vehicle_selected.stolen;" style="margin: 15px 0;">EDIT VEHICLE</button>
+							</div>
+
+
+							<div class="col-md-6" style="max-height: 435px">
+								<div v-if="vehicle_results.results">
+									<h3>KERESÉSI EREDMÉNYEK</h3>
+									<h4 style="margin: 10px 1px 30px 1px;">Találatok a következőre: '{{ vehicle_results.query }}'...</h4>
+									<span v-if="vehicle_results.results" v-for="result in vehicle_results.results">
+										<button class="btn-primary btn btn-sm shadow-none" type="button" v-on:click="OpenVehicleDetails(result)" style="margin-bottom: 10px; width: 100%; padding: unset;"> {{ result.plate }} </button>
+										<br />
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+                    <div class="modal" v-if="modal == 'edit_vehicle'">
+                        <div v-bind:class="getClass('modal-content')" style="width: 50%; padding: 15px; margin-top: 120px; text-align: left;">
+                            <span v-bind:class="getClass('close')" v-on:click="modal = null"><i class="fas fa-times"></i></span>
+                            <h3 style="text-align: left; margin: 0; padding: 0; margin-bottom: 15px;">JÁRMŰ SZERKESZTÉSE</h3>
+                            <div style="margin-right: 5px; max-height: 65%; overflow-y: auto;">
+                                <h3>LEÍRÁSOK</h3>
+                                <input id="floatingInput" class="form-control" v-model="edit_vehicle.notes" class="no-select" type="text" v-bind:placeholder="edit_vehicle.notes">
+                                <button class="btn-primary btn btn-sm shadow-none" v-if="edit_vehicle.stolen == true" type="button" style="margin: 10px 0;" v-on:click="edit_vehicle.stolen = false">LOPOTT</button>
+                                <button class="btn-primary btn btn-sm shadow-none" v-else-if="edit_vehicle.stolen == false" type="button" style="margin: 10px 0;" v-on:click="edit_vehicle.stolen = true">NEM LOPOTT</button>
+                                <br />
+                                <button class="btn-primary btn btn-sm shadow-none" type="button" v-if="edit_vehicle.notes != vehicle_selected.notes || edit_vehicle.stolen != vehicle_selected.stolen" v-on:click="SaveVehicleEditChanges()">MENTÉS</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div v-if="page == 'Submit Warrant'">
+                    <h2 class="page-title">ŐJ FIGYELMEZTETÉS</h2>
+					<div class="row">
+						<div class="col-md-6" style="top: 15%; max-height: 450px; text-align:left;">
+							<el-form @keyup.enter.native>
+								<h3>JELENTÉS</h3>
+								<h4 v-if="warrant_new.report_title" style="font-size: 14px;"> {{ warrant_new.report_title }} </h4>
+								<h4 v-else-if="warrant_new.report_title == null"> ... </h4>
+								<h3>NÉV</h3>
+								<h4 v-if="warrant_new.name" style="font-size: 14px;"> {{ warrant_new.name }} </h4>
+								<h4 v-else-if="warrant_new.name == null"> ... </h4>
+								<h3>LEÍRÁSOK</h3>
+								<div class="form-floating mb-3">
+									<input id="floatingInput" style="width: 100%;" class="form-control report-input" v-model="warrant_new.notes" v-on:keyup.enter="SubmitNewWarrant()" type="text" placeholder="Figyelmeztetés leírása (opcionális)" required>
+									<label for="floatingInput">Figyelmeztetés leírása (opcionális)</label>
+								</div>
+								<h3>SZÁMLÁK</h3>
+								<h4 v-if="Object.keys(warrant_new.charges).length == 0"> ... </h4>
+								<span v-else-if="Object.keys(warrant_new.charges).length > 0" v-for="(amount, offense in warrant_new.charges" :key="offense">
+									<h4 style="font-size: 14px;">
+										{{ offense }} (x{{ amount }})
+									</h4>
+								</span>
+								<button class="btn-primary btn btn-sm shadow-none" v-if="warrant_new.report_id && warrant_new.char_id" v-on:click="SubmitNewWarrant()" type="button" style="margin-top: 20px">FIGYELMEZTETÉS LÉTREHOZÁSA</button>
+							</el-form>
+						</div>
+
+						<div class="col-md-6" style="max-height: 510px; text-align:left;">
+							<h3 v-if="report_results.results">KERESÉSI EREDMÉNYEK</h3>
+							<h3 v-else-if="report_results.query == ''">JELENTÉS KERESÉSE</h3>
+							<br />
+							<el-form @keyup.enter.native>
+								<div class="form-floating mb-3">
+									<input id="floatingInput" class="form-control" v-model="warrant_new.report_search" type="text" placeholder="Név vagy ID" required>
+									<button class="btn-primary btn btn-sm shadow-none" v-on:click="WarrantReportSearch()" type="button" >KERESÉS</button>
+									<label for="floatingInput">Név vagy ID</label>
+								</div>
+							</el-form>
+							<div v-if="report_results.results" style="margin-right: 10px;">
+								<h4 style="margin: 10px 1px 30px 1px;">Találatok a következőre: '{{ warrant_new.report_search }}'...</h4>
+								<span v-if="report_results.results" v-for="result in report_results.results">
+									<h4 style="font-size: 12px; margin-bottom: 3px;"> {{ result.date }} - ID: {{ result.id }} </h4>
+									<button class="btn-primary btn btn-sm shadow-none" type="button" v-on:click="warrant_new.report_title = result.title; warrant_new.name = result.name; warrant_new.charges = result.charges; warrant_new.report_id = result.id; warrant_new.char_id = result.char_id;" style="margin-bottom: 10px; width: 100%; padding: unset;"> {{ result.title }} </button>
+									<br />
+								</span>
+							</div>
+						</div>
+					</div>
+                </div>
+
+                <div v-if="page == 'Warrant Details'">
+                    <h2 class="page-title">FIGYELMZTETÉS LEÍRÁSOK</h2>
+                    <br />
+                    <div class="left-side" style="max-width: 1000px; float: unset; margin: 0 auto;">
+                        <h3>DÁTUM</h3>
+                        <h4 v-if="warrant_selected.date"> {{ warrant_selected.date }} </h4>
+                        <h4 v-else-if="warrant_selected.date == null"> ... </h4>
+                        <h3>NÉV</h3>
+                        <h4 v-if="warrant_selected.name" v-on:click="OpenOffenderDetailsById(warrant_selected.char_id)" v-bind:class="getClass('clickable')"> {{ warrant_selected.name }} </h4>
+                        <h4 v-else-if="warrant_selected.name == null"> ... </h4>
+                        <h3>JELENTÉS</h3>
+                        <h4 v-if="warrant_selected.report_title" v-on:click="OpenReportById(warrant_selected.report_id)" v-bind:class="getClass('clickable')"> {{ warrant_selected.report_title }} </h4>
+                        <h4 v-else-if="warrant_selected.report_title == null"> ... </h4>
+                        <h3>LEÍRÁSOK</h3>
+                        <h4 v-if="warrant_selected.notes"> {{ warrant_selected.notes }} </h4>
+                        <h4 v-else-if="warrant_selected.notes == null"> ... </h4>
+                        <h3>SZÁMLÁK</h3>
+                        <span v-for="(amount, offense) in warrant_selected.charges" :key="offense">
+                            <h4>
+                                {{ offense }} (x{{ amount }})
+                            </h4>
+                        </span>
+                        <h3>SZERZŐ</h3>
+                        <h4 v-if="warrant_selected.author"> {{ warrant_selected.author }} </h4>
+                        <h4 v-else-if="warrant_selected.author == null"> ... </h4>
+                        <h3>LEJÁRAT</h3>
+                        <h4 v-if="warrant_selected.expire_time"> {{ warrant_selected.expire_time }} </h4>
+                        <h4 v-else-if="warrant_selected.expire_time == null"> ... </h4>
+                        <br />
+                        <button class="btn-primary btn btn-sm shadow-none" type="button" v-on:click="changePage('Warrants')" id="warrants" >VISSZA A FIGYELMEZTETÉSEKHEZ</button>
+                        <button class="btn-primary btn btn-sm shadow-none" type="button" v-on:click="DeleteSelectedWarrant()" >TÖRLÉS</button>
+                    </div>
+                </div>
+
+                <div v-if="page == 'Calls'" >
+                    <h2 class="page-title">HÍVÁS PANEL</h2>
+                    <h4 v-if="Object.keys(calls).length == 0" style="text-align: center; font-size: 20px; font-weight: bold; margin-top: 20px;">No incoming calls.</h4>
+                    <div style="margin: 0 auto; width: 100%; max-height: 90%; overflow-y: auto; margin-top: 20px;" v-if="Object.keys(calls).length > 0">
+                        <table style="margin: 0 auto; width: 95%;">
+                            <tr>
+                                <th>#</th>
+                                <th>Hívó</th>
+                                <th>Részletek</th>
+                                <th>Dátum</th>
+                                <th>Helyszín</th>
+                                <th>-d</th>
+                                <th>Akció</th>
+                            </tr>
+                            <tr v-for="(call, index) in calls" :key="index">
+                                <td>{{index}}</td>
+                                <td>{{call.source}}</td>
+                                <td class="ellipsis"><span>{{call.details}}</span></td>
+                                <td>{{call.time}}</td>
+                                <td>{{call.location}}</td>
+                                <td>{{attached(index)}}</td>
+                                <td>
+                                    <i style="font-size: 1.5em;" class="fas fa-link" v-bind:class="getClass('clickable2')" v-if="current_call.id == null" v-on:click="AttachToCall(index)"></i>
+                                    <i style="font-size: 1.5em;" class="fas fa-unlink" v-bind:class="getClass('clickable2')" v-if="current_call.id == call.id" v-on:click="DetachFromCall(index)"></i>
+                                    <i style="font-size: 1.5em;" class="fas fa-map-marker-alt" v-bind:class="getClass('clickable2')" v-on:click="SetCallWaypoint(index)"></i>
+                                    <i style="font-size: 1.5em;" class="fas fa-info-circle" v-bind:class="getClass('clickable2')" v-on:click="ShowCallDetails(index)"></i>
+                                    <i style="font-size: 1.5em;" class="fas fa-edit" v-bind:class="getClass('clickable2')" v-if="current_call.id == call.id" v-on:click="EditCall(index)"></i>
+                                    <i style="font-size: 1.5em;" class="fas fa-trash" v-bind:class="getClass('clickable2')" v-if="current_call.id == call.id" v-on:click="DeleteCall(index)"></i>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="modal" v-if="modal == 'call_details'">
+                        <div v-bind:class="getClass('modal-content')" style="width: 50%; padding: 15px; margin-top: 120px; text-align: left;">
+                            <span v-bind:class="getClass('close')" v-on:click="modal = null"><i class="fas fa-times"></i></span>
+                            <h3 style="text-align: left; margin: 0; padding: 0; margin-bottom: 15px;">HÍVÁS RÉSZLETEK</h3>
+                            <div style="margin-right: 5px;max-height: 65%; overflow-y: auto;">
+                                <p style="font-style: italic;">A hívás készült: {{calls[selected_call].time}}.</p>
+                                <p style="font-weight: bold; margin-bottom: 0;">\\Date >></p>
+                                <p style="margin-top: 0;">{{calls[selected_call].time}}</p>
+                                <p style="font-weight: bold; margin-bottom: 0;">\\Details >></p>
+                                <p style="margin-top: 0;">{{calls[selected_call].details}}</p>
+                                <p style="font-weight: bold; margin-bottom: 0;">\\Location >></p>
+                                <p style="margin-top: 0;">{{calls[selected_call].location}}</p>
+                                <p style="font-weight: bold; margin-bottom: 0;">\\Attached >></p>
+                                <p style="margin-top: 0;" v-for="officer in calls[selected_call].officers">{{officer}}</p>
+                                <p style="font-style: italic; margin-top: 0;" v-if="calls[selected_call].officers.length == 0">-</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal" v-if="modal == 'edit_call'">
+                        <div v-bind:class="getClass('modal-content')" style="width: 50%; padding: 15px; margin-top: 120px; text-align: left;">
+                            <span v-bind:class="getClass('close')" v-on:click="modal = null"><i class="fas fa-times"></i></span>
+                            <h3 style="text-align: left; margin: 0; padding: 0; margin-bottom: 15px;">HÍVÁS RÉSZLETEK</h3>
+                            <div style="margin-right: 5px; max-height: 65%; overflow-y: auto;">
+                                <textarea v-model="edit_call.details" class="form-control" :class="getClass('textarea')" rows="6" cols="55" placeholder="Írd be a jelentés leírását" onkeypress='this.style.height = "";this.style.height = this.scrollHeight + "px"' required>
+                                </textarea>
+                                <br />
+                                <button class="btn-primary btn btn-sm shadow-none" type="button" v-if="edit_call != current_call.details" v-on:click="SaveEditCall()">MENTÉS</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal" style="vertical-align:center;" v-if="modal == 'loading'" >
+                    <div v-bind:class="getClass('modal-content')" style="width: 10%; height: auto; margin: 20% auto;">
+                        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                    </div>
+                </div>
+
+                <div id="notification" v-bind:class="getClass('notification')">
+                    <h4>{{notify}}</h4>
+                </div>
+            </main>
+            
+
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+	<script src="croppie.js"></script>
+    <script
+        src = "https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity = "sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin = "anonymous">
+    </script>
+    <script src="script.js"></script>
+    <script>
+        var dots = window.setInterval( function() {
+            if (mdtApp.modal == 'loading') {
+                var wait = document.getElementById("wait");
+            }
+        }, 200);
+    </script>
+</body>
+</html>

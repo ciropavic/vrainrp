@@ -1,0 +1,60 @@
+{
+    "locals": "en",
+
+    "EnableAcFunctions": false,
+
+    "allLogs": true,
+    "postals": true,
+    "weaponLog": true,
+    "inlineField": true,
+
+    "playerId": true,
+    "steamId": true,
+    "steamUrl": true,
+    "discordId": true,
+    "license": true,
+    "license2": true,
+    "ip": true,
+    "playerPing": true,
+
+    "Session": false,
+    "PlayTime": false,
+    "playerHealth": true,
+    "playerArmor": true,
+    "timestamp": true,
+
+    "forceSteam": false,
+
+    "nameChangePerms": "jd.staff",
+    "logHistoryPerms": "jd.staff",
+    "screenshotPerms": "jd.staff",
+    "AntiCheatBypass": "jd.staff",
+
+    "DiscordUpdateNotify": true,
+
+    "userName": "Vrain Logs",
+    "avatar": "https://cdn.discordapp.com/attachments/821811915189256204/958069789086089216/443263_1.png",
+    "communityName": "VRAIN ROLEPLAY",
+    "communityLogo": "https://cdn.discordapp.com/attachments/821811915189256204/958069789086089216/443263_1.png",
+    "footerText": "2019 - © Vrain",
+    "footerIcon": "https://cdn.discordapp.com/attachments/821811915189256204/958069789086089216/443263_1.png",
+
+    "PrefechGlobalBans": true,
+    "GlobalBanBypass": [],
+
+    "WeaponsNotLogged": [
+        "WEAPON_SNOWBALL",
+        "WEAPON_FIREEXTINGUISHER",
+        "WEAPON_PETROLCAN"
+    ],
+
+    "Commands": {
+        "logs": ["logs", "lh"],
+        "screenshot": ["screenshot", "ss"]
+    },
+
+    "useESX": true,
+    "esxName": true,
+    "esxJob": true,
+    "esxMoney": true
+}

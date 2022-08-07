@@ -1,0 +1,40 @@
+assert(load(exports.vCore:require({ "identifier" })))();
+
+local ESX;
+TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+
+local CachedPlayerIds = {};
+local Protected = {
+
+};
+
+AddEventHandler("playerJoining", function()
+    local player = source;
+    local ids = GetPlayerIdentifiers(player);
+    
+    ids.joined = os.time();
+
+    CachedPlayerIds[player] = ids;
+end);
+
+function banPlayer(player)
+
+end 
+
+ESX.RegisterCommand(
+    'pban', 
+    'adminseged', 
+    function(xPlayer, args, showError)
+        print(json.encode(args), tostring(showError));
+    end, 
+    true, 
+    { 
+        help = "Játékos kitiltása", 
+        validate = false, 
+        arguments = {
+	        { name = "id", help = "Játékos ID [Akkor is ha lelépett már]", type = "number" }, 
+            { name = "duration", help = "Időtartam (óra)", type = "number" },
+            { name = "reason", help = "Indok", type = 'any' },
+        }
+    }
+);

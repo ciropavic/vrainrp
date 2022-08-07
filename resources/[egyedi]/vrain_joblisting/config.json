@@ -1,0 +1,37 @@
+{
+  "jobs": [
+    {
+      "jobLabel": "Kukás",
+      "jobName": "garbage",
+      "imagepath": "images/trash.png",
+      "description": "Egy kukásautóval kell utaznod a város területén, és a GPS segítségével felszedned pár szemetet, majd ezeket az autóba helyezned."
+    },
+    {
+      "jobLabel": "Buszsofőr",
+      "jobName": "busdriver",
+      "imagepath": "images/bus.png",
+      "description": "A város területén egy busszal kell megállókról, megállókra embereket szállítanod. Figyelj a közlekedésedre!"
+    },
+    {
+      "jobLabel": "Kamionos",
+      "jobName": "trucker",
+      "imagepath": "images/delivery_job_w.png",
+      "description": "Egy kamiont kell elvezetned az állam minden részére!"
+    },
+    {
+      "jobLabel": "Munkanélküli",
+      "jobName": "unemployed",
+      "imagepath": "images/no_image_job_W.png",
+      "description": "Nem szeretnél semmit sem dolgozni? Akkor válaszd ki ezt az opciót, egy kis segélyt is kapsz!"
+    }
+  ],
+  "lang": "EN",
+
+  "jobCenter": "Munkaügyi központ",
+
+  "pedInfo": {
+    "PedCoords": { "x": -550.86590576172, "y": -189.86, "z": 36.7 },
+    "PedHeading": 190.97,
+    "PedName": "u_m_y_chip"
+  }
+}

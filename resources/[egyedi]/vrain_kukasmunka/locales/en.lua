@@ -1,0 +1,19 @@
+Locales['en'] = {
+  ['cloakroom']	= 'cloakroom',
+  ['job_wear'] = 'clock-In',
+  ['citizen_wear'] = 'clock-Out',
+  ['vehiclespawner'] = 'Válaszd ki a járműved', 
+  ['already_have_truck'] = 'Már van egy jármüved, ahhoz hogy újat igényelj, add le a másikat.', 
+  ['collection'] = 'Nyomd meg a(z) ~INPUT_PICKUP~ betüt, hogy kinyisd a kukásautó hátulját.',
+  ['return_depot'] = 'A szemetet vidd vissza a kukásautóhoz.',
+  ['blip_job'] = 'Kukás munka', --'Garbage company',
+  ['blip_delivery'] = 'Kukás munka : Felvételi pont', --'Garbage company : Delivery',
+  ['blip_goal'] = 'Kukás munka : Munka befejezés', --'Garbage company : Delivery point',
+  ['cancel_mission'] = 'Nyomd meg a(z) ~INPUT_PICKUP~ betüt, hogy befejezd a munkát.',
+  ['collect_bags'] = 'Nyomd meg a(z) ~INPUT_PICKUP~ betüt, hogy felszedd a szemetet. (Még %s darab szemét maradt.)',
+  ['not_near_truck'] = 'Nincsen kukásautó a közelben, ahova letudnád tenni a szemetet.',
+  ['need_work_truck'] = 'Csak kukásautóba tudsz szemetet rakni.',
+  ['toss_bag'] = 'Nyomd meg a(z) ~INPUT_PICKUP~ betüt, hogy behelyezd a kukásautóba a szemetet.',
+  ['drive_to_collection'] = 'Kérlek vezess a kijelölt pontra, hogy megkezd a munkát.',
+  ['no_trash_aviable'] = 'Ezen a helyen nincsen szemét, amit feltudnál szedni.'
+}

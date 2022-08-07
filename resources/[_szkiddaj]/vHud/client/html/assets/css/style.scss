@@ -1,0 +1,113 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap");
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+
+  overflow: hidden;
+}
+
+$avatarBackgroundWidth: 20%;
+
+.wrapper {
+  position: absolute;
+  top: 26pt;
+  right: 8pt;
+
+  width: 325px;
+
+  .player {
+    width: 100%;
+
+    padding: 3pt 0pt;
+    background: rgb(24, 24, 24);
+    border-radius: 6pt;
+    display: inline-block;
+
+    .character {
+      float: left;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: $avatarBackgroundWidth;
+      height: 100%;
+
+      .logo {
+        width: 80%;
+        transform: translate(10%, 20%);
+      }
+    }
+
+    .status {
+      float: right;
+      width: calc(100% - #{$avatarBackgroundWidth});
+      transform: translateY(3.5%);
+
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+
+      .bar {
+        width: var(--width);
+        height: 20px;
+        margin: 2pt;
+        background: var(--background);
+        border-radius: 6pt;
+        align-self: flex-end;
+
+        .icon {
+          font-size: 9pt;
+          transform: translate(50%, 25%);
+          position: absolute;
+          color: var(--color);
+        }
+
+        .value {
+          width: var(--width);
+          height: 100%;
+          background: var(--background);
+          border-radius: 6pt;
+        }
+      }
+
+      .text-item {
+        padding: 2pt 0pt;
+        width: var(--width);
+        text-align: var(--align);
+        font-family: "Open+Sans", sans-serif;
+        font-weight: bold;
+        font-size: var(--size);
+        color: rgb(95, 95, 95);
+      }
+    }
+  }
+
+  .job {
+    padding: 4pt 6pt;
+    background: rgb(24, 24, 24);
+    border-radius: 6pt;
+
+    color: rgb(95, 95, 95);
+    font-family: "Open+Sans", sans-serif;
+
+    white-space: nowrap;
+
+    .name {
+      margin: 1.5pt 0pt;
+      float: left;
+      font-weight: 700;
+      font-size: 9pt;
+      width: 40%;
+    }
+
+    .texts {
+      text-align: right;
+      display: inline-block;
+      font-size: 11pt;
+      width: 60%;
+    }
+  }
+}

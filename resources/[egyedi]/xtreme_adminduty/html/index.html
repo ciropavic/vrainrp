@@ -1,0 +1,115 @@
+<html>
+  <head>
+    <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+    <link
+      href="https://fonts.googleapis.com/css?family=Dosis"
+      rel="stylesheet"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script
+      src="https://kit.fontawesome.com/83c87aae69.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" type="text/css" href="index.css" />
+  </head>
+
+  <body>
+    <div class="main">
+      <div class="header">
+        <div class="text">Vrain Admin Panel</div>
+      </div>
+
+      <div class="infos"></div>
+
+      <br /><br /><br />
+
+      <div class="settingstable">
+        <div class="divTableBody">
+          <div class="divTableRow">
+            <div
+              style="text-align: left; width: 100px; padding-left: 30px"
+              class="divTableCell"
+            >
+              Szolgálatba lépés
+            </div>
+            <input id="s1" type="checkbox" class="switch" check />
+          </div>
+          <br />
+          <div class="divTableRow">
+            <div
+              style="text-align: left; width: 100px; padding-left: 30px"
+              class="divTableCell"
+            >
+              Nagy ugrás
+            </div>
+            <input id="s3" type="checkbox" class="switch" check />
+          </div>
+          <br />
+          <div class="divTableRow">
+            <div
+              style="text-align: left; width: 100px; padding-left: 30px"
+              class="divTableCell"
+            >
+              Halhatatlanság
+            </div>
+            <input id="s4" type="checkbox" class="switch" check />
+          </div>
+          <br />
+          <div class="divTableRow">
+            <div
+              style="text-align: left; width: 100px; padding-left: 30px"
+              class="divTableCell"
+            >
+              Láthatatlanság
+            </div>
+            <input id="s5" type="checkbox" class="switch" check />
+          </div>
+          <br />
+          <div class="divTableRow">
+            <div
+              style="text-align: left; width: 100px; padding-left: 30px"
+              class="divTableCell"
+            >
+              Gyors futás
+            </div>
+            <input id="s6" type="checkbox" class="switch" check />
+          </div>
+          <br />
+          <div class="divTableRow">
+            <div
+              style="text-align: left; width: 100px; padding-left: 30px"
+              class="divTableCell"
+            >
+              Ejtőernyőzés
+            </div>
+            <input id="s7" type="checkbox" class="switch" check />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="logo">
+      <img onclick="logo()" src="logo.png" width="200" height="150" />
+      <h4>
+        <center>
+          Admin taged használatához,<br />
+          kattints a logóra!
+        </center>
+      </h4>
+    </div>
+
+    <div class="playerlisting">
+      <table class="playerlist">
+        <th>ID</th>
+        <th>Steam Név</th>
+        <th>Teljes Név</th>
+        <th>Frakció</th>
+        <th>Rang</th>
+
+        <tr></tr>
+      </table>
+    </div>
+
+    <script src="./script.js" type="text/javascript"></script>
+  </body>
+</html>

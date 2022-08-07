@@ -1,0 +1,645 @@
+<html>
+  <head>
+    <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="css/all.min.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="closemenu" class="modal">
+        <div class="modal-content">
+          <h4>MEGERŐSÍTÉS</h4>
+          <p>Kinézet megvásárlása</p>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" id="save" class="modal-close waves-effect waves-light btn green">Vásárlás ($25)</a>
+          <a href="#!" id="cancel" class="modal-close waves-effect waves-light btn grey">Visszavonás</a>
+          <a href="#!" id="AHORRARmedenkapat" class="modal-close waves-effect waves-light btn red">Kilépés</a>
+        </div>
+      </div>
+      <div id="savemenu" style="height: auto" class="modal">
+        <div style="height: 100px" class="modal-content">
+          <h4>MEGERŐSÍTÉS</h4>
+          <p>A kinézet nevének megadása után, nyomd meg az ENTER gombot. (25$)</p>
+        </div>
+        <div class="modal-footer">
+          <!-- <input id="savename" class="input-number col s4" type="text" /> -->
+          <input
+            style="width: 920px; height: 36px; background-color: rgb(89, 190, 86)"
+            class="black-text text-lighten-3 panel-label"
+            placeholder="Öltözék neve"
+            type="text"
+          />
+          <!-- <a href="#!" id="savesave" class="modal-close waves-effect waves-light btn green">Ekle</a> -->
+          <a href="#!" id="cancelsave" style="bottom: 4px" class="modal-close waves-effect waves-light btn grey">Vissza</a>
+        </div>
+      </div>
+      <div id="clothesmenu" style="display: none" class="row">
+        <div id="clothes-container" class="col s5">
+          <div id="button_menu" class="row">
+            <button id="button-clothes" data-target="clothes" class="button-menu waves-effect waves-light btn-large active">
+              Ruházat
+            </button>
+            <button id="button-access" data-target="access" class="button-menu waves-effect waves-light btn-large">
+              Kiegészítők
+            </button>
+            <button id="button-ped" data-target="ped" class="button-menu waves-effect waves-light btn-large">
+              Ruhásszekrény
+            </button>
+          </div>
+          <div id="camera_menu" class="row">
+            <div class="col s12">
+              <button class="tog_hat col s2 btn-cam waves-effect waves-light btn-large">
+                <i class="fab fa-redhat"></i>
+              </button>
+              <button class="tog_glasses col s2 btn-cam waves-effect waves-light btn-large">
+                <i class="fas fa-glasses"></i>
+              </button>
+              <button class="tog_tops col s2 btn-cam waves-effect waves-light btn-large">
+                <i class="fas fa-tshirt"></i>
+              </button>
+              <button class="tog_head col s2 btn-cam waves-effect waves-light btn-large">
+                <i class="fas fa-meh"></i>
+              </button>
+              <button class="tog_torso col s2 btn-cam waves-effect waves-light btn-large">
+                <i class="fas fa-user-tie"></i>
+              </button>
+              <button class="tog_leg col s2 btn-cam waves-effect waves-light btn-large">
+                <i class="fas fa-socks"></i>
+              </button>
+            </div>
+          </div>
+          <div id="clothes" class="row">
+            <div class="scroll-container">
+              <div id="hats" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Kalap</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Modell: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Szín: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div id="hair" class="hair col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Haj</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Modell: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Szín: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                  <div class="col s12">
+                    <ul class="collapsible">
+                      <li>
+                        <div class="collapsible-header">Szín paletta</div>
+                        <div class="collapsible-body color_palette_container haircol"></div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col s12">
+                    <ul class="collapsible">
+                      <li>
+                        <div class="collapsible-header">Szín paletta 2</div>
+                        <div class="collapsible-body color_palette_container haircol"></div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div id="jackets" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Kabát</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Modell: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Szín: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div id="undershirts" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Póló</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Modell: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Szín: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div id="torsos" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Pulóver</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Modell: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Szín: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div id="legs" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Nadrág</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Modell: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Szín: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div id="shoes" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Cípő</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Modell: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Szín: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div id="decals" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Extra</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Modell: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Szín: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="access" class="row" style="display: none">
+            <div class="scroll-container">
+              <div id="masks" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Maszk</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Modell: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Szín: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div id="glasses" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Szemüveg</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Modell: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Szín: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div id="earrings" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Fülbevaló</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Modell: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Szín: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div id="neck" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Nyaklánc</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Modell: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Szín: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div id="watches" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Óra</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Modell: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Szín: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div id="braclets" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Karkötő</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Modell: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Szín: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div id="vest" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Mellény</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Modell: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Szín: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div id="bags" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Táska</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Modell: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                  <div class="col s6 panel-col">
+                    <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                      Szín: <span class="total-number"></span>
+                    </h6>
+                    <button class="button-left col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input class="input-number col s4" type="number" value="0" />
+                    <button class="button-right col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="ped" class="row" style="display: none">
+            <div class="scroll-container">
+              <div id="warning_skins" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Fontos információ</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s12 panel-col">
+                    <p>Visszaszeretnéd állítani a kinézeted alapra?</p>
+                    <button id="reset" class="waves-effect waves-light btn">MEGERŐSÍTÉS</button>
+                  </div>
+                </div>
+              </div>
+              <div id="savedclothes" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">
+                    Kinézet tárolása a gardróbban
+                  </h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s12 panel-col">
+                    <p>Ruhásszekrény</p>
+                    <button id="savecurrent" class="waves-effect waves-light btn">MEGERŐSÍTÉS</button>
+                  </div>
+                </div>
+              </div>
+              <div id="savedclothes" class="col s12 panel">
+                <div class="col s12 panel-title">
+                  <h6 class="grey-text text-lighten-3 panel-label" style="font-weight: bold">Elmentett kinézetek</h6>
+                </div>
+                <div class="col s12 panel-bottom">
+                  <div class="col s6 panel-col">
+                    <button id="savedleft" class="button-left2 col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_left</i>
+                    </button>
+                    <input id="savedinput" class="input-number col s4" type="number" value="0" />
+                    <button id="savedright" class="button-right2 col s4 waves-effect waves-light btn">
+                      <i class="material-icons">chevron_right</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="script.js" type="text/javascript"></script>
+  </body>
+</html>
